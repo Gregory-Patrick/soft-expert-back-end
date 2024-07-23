@@ -1,0 +1,10 @@
+{
+    "name": "vendor/backend",
+    "description": "composer for api back-end",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}
