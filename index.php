@@ -1,5 +1,11 @@
 <?php
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
     require_once __DIR__ . '/vendor/autoload.php';
+
+    use App\Core\Router;
+    use App\Controllers\ProductController;
 
     // Configurações (por exemplo, conexão com o banco de dados, configurações de ambiente)
     // require_once __DIR__ . '/../config/config.php';
@@ -18,26 +24,12 @@
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
-    use App\Core\Router;
-
     $router = new Router();
-    $router->addRoute('GET', '/api/products', 'ProductController@getAll');
-    $router->addRoute('POST', '/api/products', 'ProductController@create');
-    $router->addRoute('GET', '/api/products/{id}', 'ProductController@getById');
-    $router->addRoute('PUT', '/api/products/{id}', 'ProductController@update');
-    $router->addRoute('DELETE', '/api/products/{id}', 'ProductController@delete');
+    $router->addRoute('GET', '/api/products', [ProductController::class, 'getAll']);
+    $router->addRoute('POST', '/api/products', [ProductController::class, 'create']);
+    $router->addRoute('GET', '/api/products/{id}', [ProductController::class, 'getById']);
+    $router->addRoute('PUT', '/api/products/{id}', [ProductController::class, 'update']);
+    $router->addRoute('DELETE', '/api/products/{id}', [ProductController::class, 'delete']);
 
-    $requestUri = $_SERVER['REQUEST_URI'];
-    $requestMethod = $_SERVER['REQUEST_METHOD'];
-
-    try {
-        $router->dispatch($requestMethod, $requestUri);
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode(['error' => $e->getMessage()]);
-    }
-
+    $router->run();
 ?>

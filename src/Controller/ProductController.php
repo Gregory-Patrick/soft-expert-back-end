@@ -3,11 +3,13 @@
 
 namespace App\Controllers;
 
+use App\Models\Product;
+
 class ProductController {
 
     public function getAll() {
         // Recupera todos os produtos do banco de dados
-        $products = Product::all();
+        $products = Product::all($a = null);
         
         // Define o cabeçalho de resposta como JSON
         header('Content-Type: application/json');
