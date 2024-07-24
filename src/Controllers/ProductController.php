@@ -52,7 +52,7 @@
                 ]);
             }
 
-            if($this->productModel->createProduct($data['name'], $data['price'])) {
+            if($this->productModel->save($data)) {
                 $this->response->simpleResponse(200, [
                     'success' => true,
                     'message' => 'Product registered successfully'
@@ -73,7 +73,7 @@
                 $data['name'] = $this->productModel->findById($id)['name'];
             }
 
-            if($this->productModel->updateProduct($id, $data['name'], $data['price'] ?? 0)) {
+            if($this->productModel->update($id, $data)) {
                 $this->response->simpleResponse(200, [
                     'success' => true,
                     'message' => 'Product updated successfully'
@@ -90,7 +90,7 @@
             $id = intval(basename($_SERVER['REQUEST_URI']));
 
             if($this->productModel->findById($id)) {
-                $this->productModel->deleteProduct($id);
+                $this->productModel->delete($id);
                 
                 $this->response->simpleResponse(200, [
                     'success' => true,
