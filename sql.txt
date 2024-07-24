@@ -20,3 +20,6 @@ CREATE TABLE product_tax (
     ipi DECIMAL(5, 2),
     FOREIGN KEY (id_product_type) REFERENCES product_type(id)
 );
+
+Venda: ID, Quantidade, id_produto, Preço Uni, preço total
+Imposto sobre a venda: ID, id_venda, pis, confins, icms , ipi, total
