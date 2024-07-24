@@ -7,9 +7,6 @@
     use App\Core\Router;
     use App\Controllers\ProductController;
 
-    // Configurações (por exemplo, conexão com o banco de dados, configurações de ambiente)
-    // require_once __DIR__ . '/../config/config.php';
-
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Origin: http://localhost:3000");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -17,7 +14,7 @@
         header("Access-Control-Max-Age: 86400");
 
         http_response_code(204);
-        exit(0);
+        exit();
     }
 
     header("Access-Control-Allow-Origin: http://localhost:3000");

@@ -6,6 +6,7 @@
         private $routes = [];
 
         public function addRoute($method, $route, $handler) {
+            $route = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $route);
             $this->routes[] = [
                 'method' => $method,
                 'route' => $route,
@@ -16,9 +17,8 @@
         public function run() {
             $requestMethod = $_SERVER['REQUEST_METHOD'];
             $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    
             foreach ($this->routes as $route) {
-                if ($requestMethod == $route['method'] && preg_match('#^' . $route['path'] . '$#', $requestUri, $matches)) {
+                if ($requestMethod == $route['method'] && preg_match('#^' . $route['route'] . '$#', $requestUri, $matches)) {
                     $handler = $route['handler'];
                     if (is_array($handler)) {
                         $controller = new $handler[0]();
