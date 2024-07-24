@@ -6,6 +6,7 @@
 
     use App\Core\Router;
     use App\Controllers\ProductController;
+    use App\Controllers\ProductTypeController;
 
     header("Access-Control-Allow-Origin: http://localhost:3000");
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -23,6 +24,12 @@
     $router->addRoute('GET', '/api/products/{id}', [ProductController::class, 'getById']);
     $router->addRoute('PUT', '/api/products/{id}', [ProductController::class, 'update']);
     $router->addRoute('DELETE', '/api/products/{id}', [ProductController::class, 'delete']);
+
+    $router->addRoute('GET', '/api/types', [ProductTypeController::class, 'getAll']);
+    $router->addRoute('POST', '/api/types', [ProductTypeController::class, 'create']);
+    $router->addRoute('GET', '/api/types/{id}', [ProductTypeController::class, 'getById']);
+    $router->addRoute('PUT', '/api/types/{id}', [ProductTypeController::class, 'update']);
+    $router->addRoute('DELETE', '/api/types/{id}', [ProductTypeController::class, 'delete']);
 
     $router->run();
 ?>

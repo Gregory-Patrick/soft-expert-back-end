@@ -9,8 +9,8 @@
 
         public function __construct($dbConnection) {
             parent::__construct($dbConnection, $this->table);
-
         }
+    }
 
         // public function findAll() {
         //     $stmt = $this->conn->prepare("SELECT * FROM product");
@@ -45,6 +45,5 @@
         //     $stmt->bindParam(':id', $id , PDO::PARAM_INT);
         //     return $stmt->execute();
         // }
-    }
 
 ?>

@@ -3,106 +3,111 @@
     namespace App\Controllers;
 
     use App\Config\Sql;
+    use App\Core\BaseController;
     use App\Utils\Response;
     use App\Models\ProductModel;
 
-    class ProductController {
+    class ProductController extends BaseController {
 
         private $productModel;
-        private $response;
+        // private $response;
 
         public function __construct() {
-            $db = new Sql();
-            $this->productModel = new ProductModel($db->getConnection());
-
-            $this->response = new Response();
+            $this->productModel = new ProductModel($this->db->getConnection());
+            parent::__construct($this->productModel);
         }
 
-        public function getAll() {
-            if(!$products = $this->productModel->findAll()) {
-                $this->response->simpleResponse(404, [
-                    'success' => false,
-                    'message' => 'No products were found'
-                ]);
-            }
+        // public function __construct() {
+        //     $db = new Sql();
+        //     $this->productModel = new ProductModel($db->getConnection());
 
-            $this->response->objectResponse(200, $products);
-        }
+        //     $this->response = new Response();
+        // }
 
-        public function getById() {
-            $id = intval(basename($_SERVER['REQUEST_URI']));
+        // public function getAll() {
+        //     if(!$products = $this->productModel->findAll()) {
+        //         $this->response->simpleResponse(404, [
+        //             'success' => false,
+        //             'message' => 'No products were found'
+        //         ]);
+        //     }
 
-            if(!$product = $this->productModel->findById($id)) {
-                $this->response->simpleResponse(404, [
-                    'success' => false,
-                    'message' => 'Product not found'
-                ]);
-            }
+        //     $this->response->objectResponse(200, $products);
+        // }
 
-            $this->response->objectResponse(200, $product);
-        }
+        // public function getById() {
+        //     $id = intval(basename($_SERVER['REQUEST_URI']));
 
-        public function create() {
-            $data = json_decode(file_get_contents('php://input'), true);
+        //     if(!$product = $this->productModel->findById($id)) {
+        //         $this->response->simpleResponse(404, [
+        //             'success' => false,
+        //             'message' => 'Product not found'
+        //         ]);
+        //     }
 
-            if(!isset($data['name']) || !isset($data['price'])) {
-                $this->response->simpleResponse(400, [
-                    'success' => false,
-                    'message' => 'Mandatory parameters not received, name and price is mandatory'
-                ]);
-            }
+        //     $this->response->objectResponse(200, $product);
+        // }
 
-            if($this->productModel->save($data)) {
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product registered successfully'
-                ]);
-            }
+        // public function create() {
+        //     $data = json_decode(file_get_contents('php://input'), true);
 
-            $this->response->simpleResponse(500, [
-                'success' => false,
-                'message' => 'Something unexpected happened, try again later'
-            ]);
-        }
+        //     if(!isset($data['name']) || !isset($data['price'])) {
+        //         $this->response->simpleResponse(400, [
+        //             'success' => false,
+        //             'message' => 'Mandatory parameters not received, name and price is mandatory'
+        //         ]);
+        //     }
 
-        public function update() {
-            $id = intval(basename($_SERVER['REQUEST_URI']));
-            $data = json_decode(file_get_contents('php://input'), true);
+        //     if($this->productModel->save($data)) {
+        //         $this->response->simpleResponse(200, [
+        //             'success' => true,
+        //             'message' => 'Product registered successfully'
+        //         ]);
+        //     }
 
-            if(!isset($data['name'])) {
-                $data['name'] = $this->productModel->findById($id)['name'];
-            }
+        //     $this->response->simpleResponse(500, [
+        //         'success' => false,
+        //         'message' => 'Something unexpected happened, try again later'
+        //     ]);
+        // }
 
-            if($this->productModel->update($id, $data)) {
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product updated successfully'
-                ]);
-            }
+        // public function update() {
+        //     $id = intval(basename($_SERVER['REQUEST_URI']));
+        //     $data = json_decode(file_get_contents('php://input'), true);
 
-            $this->response->simpleResponse(500, [
-                'success' => false,
-                'message' => 'Something unexpected happened, try again later'
-            ]);
-        }
+        //     if(!isset($data['name'])) {
+        //         $data['name'] = $this->productModel->findById($id)['name'];
+        //     }
 
-        public function delete() {
-            $id = intval(basename($_SERVER['REQUEST_URI']));
+        //     if($this->productModel->update($id, $data)) {
+        //         $this->response->simpleResponse(200, [
+        //             'success' => true,
+        //             'message' => 'Product updated successfully'
+        //         ]);
+        //     }
 
-            if($this->productModel->findById($id)) {
-                $this->productModel->delete($id);
+        //     $this->response->simpleResponse(500, [
+        //         'success' => false,
+        //         'message' => 'Something unexpected happened, try again later'
+        //     ]);
+        // }
+
+        // public function delete() {
+        //     $id = intval(basename($_SERVER['REQUEST_URI']));
+
+        //     if($this->productModel->findById($id)) {
+        //         $this->productModel->delete($id);
                 
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product deleted successfully'
-                ]);
-            }
+        //         $this->response->simpleResponse(200, [
+        //             'success' => true,
+        //             'message' => 'Product deleted successfully'
+        //         ]);
+        //     }
 
-            $this->response->simpleResponse(404, [
-                'success' => false,
-                'message' => 'Product not found'
-            ]);
-        }
+        //     $this->response->simpleResponse(404, [
+        //         'success' => false,
+        //         'message' => 'Product not found'
+        //     ]);
+        // }
     }
-
 ?>

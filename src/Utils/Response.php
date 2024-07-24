@@ -14,6 +14,14 @@
             echo json_encode($object);
             exit();
         }
+
+        public function getItemRequestId() {
+            return intval(basename($_SERVER['REQUEST_URI']));
+        }
+
+        public function getDataRequest() {
+            return json_decode(file_get_contents('php://input'), true);
+        }
     }
 
 ?>
