@@ -52,20 +52,6 @@
                 ]);
             }
 
-            if(!is_string($data['name'])) {
-                $this->response->simpleResponse(400, [
-                    'success' => false,
-                    'message' => 'Mandatory parameter with wrong type, name must be of type string'
-                ]);
-            }
-
-            if(!is_float($data['price']) && !is_int($data['price'])) {
-                $this->response->simpleResponse(400, [
-                    'success' => false,
-                    'message' => 'Mandatory parameter with wrong type, price must be of type number'
-                ]);
-            }
-
             if($this->productModel->createProduct($data['name'], $data['price'])) {
                 $this->response->simpleResponse(200, [
                     'success' => true,

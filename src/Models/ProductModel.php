@@ -24,14 +24,14 @@
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
-        public function createProduct(string $name, float $price) {
+        public function createProduct(string $name, string $price) {
             $stmt = $this->conn->prepare("INSERT INTO products (name, price) VALUES (:name, :price)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':price', $price);
             return $stmt->execute();
         }
 
-        public function updateProduct(int $id, string $name, float $price) {
+        public function updateProduct(int $id, string $name, string $price) {
             $stmt = $this->conn->prepare("UPDATE products SET name = :name, price = :price WHERE id = :id");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':price', $price);
