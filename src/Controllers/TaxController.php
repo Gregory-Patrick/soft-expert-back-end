@@ -2,6 +2,7 @@
 
     namespace App\Controllers;
 
+    use App\Config\Sql;
     use App\Core\BaseController;
     use App\Models\TaxModel;
 
@@ -9,7 +10,8 @@
         private $taxModel;
 
         public function __construct() {
-            $this->taxModel = new TaxModel($this->db->getConnection());
+            $db = new Sql();
+            $this->taxModel = new TaxModel($db->getConnection());
             parent::__construct($this->taxModel);
         }
     }

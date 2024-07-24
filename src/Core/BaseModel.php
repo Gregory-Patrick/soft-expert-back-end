@@ -28,7 +28,7 @@ use PDO;
 
         public function save(array $params) {
             $queryParts = QueryHelper::buildInsertQueryParts($params);
-            $query = "INSERT INTO ".$this->table." ".$queryParts['columnsString']." VALUES (".$queryParts['placeholders'].")";
+            $query = "INSERT INTO ".$this->table." (".$queryParts['columnsString'].") VALUES (".$queryParts['placeholders'].")";
             
             $stmt = $this->conn->prepare($query);
             foreach($queryParts['values'] as $index => $value) {
@@ -39,13 +39,13 @@ use PDO;
 
         public function update(int $id, array $params) {
             $queryParts = QueryHelper::buildUpdateQueryParts($params);
-            $query = "UPDATE ".$this->table."SET ".$queryParts['setString']." WHERE id = :id";
+            $query = "UPDATE ".$this->table." SET ".$queryParts['setString']." WHERE id = ?";
             
             $stmt = $this->conn->prepare($query);
             foreach($queryParts['values'] as $index => $value) {
                 $stmt->bindValue($index + 1, $value);
             }
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(count($queryParts['values']) + 1, $id, PDO::PARAM_INT);
             return $stmt->execute();
         }
 
