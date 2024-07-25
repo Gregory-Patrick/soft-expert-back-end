@@ -1,14 +1,14 @@
-CREATE TABLE product_type (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE product (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_product_type INT,
     name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (id_product_type) REFERENCES product_type(id)
+    price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE product_type (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product INT  NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES product(id)
 );
 
 CREATE TABLE product_tax (

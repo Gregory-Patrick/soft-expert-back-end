@@ -6,8 +6,8 @@
     use App\Core\BaseController;
     use App\Models\TaxModel;
 
-    class TaxController extends BaseController{
-        private $taxModel;
+    class TaxController extends BaseController {
+        protected  $taxModel;
 
         public function __construct() {
             $db = new Sql();

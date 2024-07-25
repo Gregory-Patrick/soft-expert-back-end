@@ -7,7 +7,7 @@
     use App\Models\ProductTypeModel;
 
     class ProductTypeController extends BaseController {
-        private $productTypeModel;
+        protected  $productTypeModel;
 
         public function __construct() {
             $db = new Sql();

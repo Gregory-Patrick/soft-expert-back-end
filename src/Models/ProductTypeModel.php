@@ -5,7 +5,7 @@
     use App\Core\BaseModel;
 
     class ProductTypeModel extends BaseModel {
-        private $table = 'product_type';
+        protected $table = 'product_type';
 
         public function __construct($dbConnection) {
             parent::__construct($dbConnection, $this->table);

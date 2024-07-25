@@ -19,12 +19,12 @@
         public function getAll() {
             $data = $this->model->findAll();
             if (!$data) {
-                return $this->response->simpleResponse(404, [
+                $this->response->simpleResponse(404, [
                     'success' => false,
                     'message' => 'No products were found'
                 ]);
             }
-            return $this->response->objectResponse(200, $data);
+            $this->response->objectResponse(200, $data);
         }
 
         public function getById() {
@@ -32,31 +32,31 @@
 
             $data = $this->model->findById($id);
             if (!$data) {
-                return $this->response->simpleResponse(404, [
+                $this->response->simpleResponse(404, [
                     'success' => false,
                     'message' => 'Product not found'
                 ]);
             }
-            return $this->response->objectResponse(200, $data);
+            $this->response->objectResponse(200, $data);
         }
 
         public function create() {
             $data = $this->response->getDataRequest();
-            if(!isset($data['name']) || !isset($data['price'])) {
-                return $this->response->simpleResponse(400, [
-                    'success' => false,
-                    'message' => 'Mandatory parameters not received, name and price is mandatory'
-                ]);
-            }
+            // if(!isset($data['name']) || !isset($data['price'])) {
+            //     $this->response->simpleResponse(400, [
+            //         'success' => false,
+            //         'message' => 'Mandatory parameters not received, name and price is mandatory'
+            //     ]);
+            // }
 
             if ($this->model->save($data)) {
-                return $this->response->simpleResponse(200, [
+                $this->response->simpleResponse(200, [
                     'success' => true,
                     'message' => 'Product registered successfully'
                 ]);
             }
 
-            return $this->response->simpleResponse(500, [
+            $this->response->simpleResponse(500, [
                 'success' => false,
                 'message' => 'Something unexpected happened, try again later'
             ]);
@@ -71,13 +71,13 @@
             }
 
             if($this->model->update($id, $data)) {
-                return $this->response->simpleResponse(200, [
+                $this->response->simpleResponse(200, [
                     'success' => true,
                     'message' => 'Product updated successfully'
                 ]);
             }
 
-            return $this->response->simpleResponse(500, [
+            $this->response->simpleResponse(500, [
                 'success' => false,
                 'message' => 'Something unexpected happened, try again later'
             ]);
@@ -89,13 +89,13 @@
             if ($this->model->findById($id)) {
                 $this->model->delete($id);
                 
-                return $this->response->simpleResponse(200, [
+                $this->response->simpleResponse(200, [
                     'success' => true,
                     'message' => 'Product deleted successfully'
                 ]);
             }
 
-            return $this->response->simpleResponse(404, [
+            $this->response->simpleResponse(404, [
                 'success' => false,
                 'message' => 'Product not found'
             ]);
