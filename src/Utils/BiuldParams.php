@@ -2,7 +2,7 @@
 
     namespace App\Utils;
 
-    class QueryHelper {
+    class BiuldParams {
         public static function buildInsertQueryParts(array $params) {
             $columns = array_keys($params);
             $values = array_values($params);

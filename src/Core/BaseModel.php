@@ -1,7 +1,7 @@
 <?php 
     namespace App\Core;
 
-use App\Utils\QueryHelper;
+use App\Utils\BiuldParams;
 use PDO;
 
     class BaseModel {
@@ -27,7 +27,7 @@ use PDO;
         }
 
         public function save(array $params) {
-            $queryParts = QueryHelper::buildInsertQueryParts($params);
+            $queryParts = BiuldParams::buildInsertQueryParts($params);
             $query = "INSERT INTO ".$this->table." (".$queryParts['columnsString'].") VALUES (".$queryParts['placeholders'].")";
             
             $stmt = $this->conn->prepare($query);
@@ -38,7 +38,7 @@ use PDO;
         }
 
         public function update(int $id, array $params) {
-            $queryParts = QueryHelper::buildUpdateQueryParts($params);
+            $queryParts = BiuldParams::buildUpdateQueryParts($params);
             $query = "UPDATE ".$this->table." SET ".$queryParts['setString']." WHERE id = ?";
             
             $stmt = $this->conn->prepare($query);

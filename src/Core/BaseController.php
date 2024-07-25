@@ -4,100 +4,71 @@
 
     use App\Config\Sql;
     use App\Utils\Response;
+    use App\Utils\Validate;
 
     class BaseController {
         protected $db;
         protected $model;
-        protected $response;
+        protected $validate;
+        public $response;
 
         public function __construct($model) {
-            $this->db = new Sql();
             $this->model = $model;
+            $this->db = new Sql();
             $this->response = new Response();
+            $this->validate = new Validate();
         }
 
-        public function getAll() {
+        protected function validate(array $data, array $rules) {
+            $this->validate->isValid($data, $rules);
+        }
+
+        protected function errorValidate($errors) {
+            $this->response->setObjectResponse(400, $errors);
+        }
+
+        protected function getAll() {
             $data = $this->model->findAll();
-            if (!$data) {
-                $this->response->simpleResponse(404, [
-                    'success' => false,
-                    'message' => 'No products were found'
-                ]);
+            if(!$data) {
+                $this->response->setSimpleResponse(404, 'Not found');
             }
             $this->response->objectResponse(200, $data);
         }
 
-        public function getById() {
+        protected function getById() {
             $id = $this->response->getItemRequestId();
-
             $data = $this->model->findById($id);
-            if (!$data) {
-                $this->response->simpleResponse(404, [
-                    'success' => false,
-                    'message' => 'Product not found'
-                ]);
+            if(!$data) {
+                $this->response->setSimpleResponse(404, 'Not found');
             }
             $this->response->objectResponse(200, $data);
         }
 
-        public function create() {
+        protected function create() {
             $data = $this->response->getDataRequest();
-            // if(!isset($data['name']) || !isset($data['price'])) {
-            //     $this->response->simpleResponse(400, [
-            //         'success' => false,
-            //         'message' => 'Mandatory parameters not received, name and price is mandatory'
-            //     ]);
-            // }
-
-            if ($this->model->save($data)) {
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product registered successfully'
-                ]);
+            if($this->model->save($data)) {
+                $this->response->setSimpleResponse(200, 'Registered successfully');
             }
-
-            $this->response->simpleResponse(500, [
-                'success' => false,
-                'message' => 'Something unexpected happened, try again later'
-            ]);
+            $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
         }
 
-        public function update() {
+        protected function update() {
             $id = $this->response->getItemRequestId();
             $data = $this->response->getDataRequest();
-
-            if(!isset($data['name'])) {
-                $data['name'] = $this->model->findById($id)['name'];
+            if($this->model->findById($id)) {
+                if($this->model->update($id, $data)) {
+                    $this->response->setSimpleResponse(200, 'Updated successfully');
+                }
             }
-
-            if($this->model->update($id, $data)) {
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product updated successfully'
-                ]);
-            }
-
-            $this->response->simpleResponse(500, [
-                'success' => false,
-                'message' => 'Something unexpected happened, try again later'
-            ]);
+            $this->response->setSimpleResponse(404, 'Not found');
         }
 
-        public function delete() {
+        protected function delete() {
             $id = $this->response->getItemRequestId();
-
-            if ($this->model->findById($id)) {
+            if($this->model->findById($id)) {
                 $this->model->delete($id);
-                
-                $this->response->simpleResponse(200, [
-                    'success' => true,
-                    'message' => 'Product deleted successfully'
-                ]);
+                $this->response->setSimpleResponse(200, 'Deleted successfully');
             }
-
-            $this->response->simpleResponse(404, [
-                'success' => false,
-                'message' => 'Product not found'
-            ]);
+            $this->response->setSimpleResponse(404, 'Not found');
         }
     }

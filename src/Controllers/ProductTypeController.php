@@ -10,9 +10,61 @@
         protected  $productTypeModel;
 
         public function __construct() {
-            $db = new Sql();
-            $this->productTypeModel = new ProductTypeModel($db->getConnection());
+            $this->productTypeModel = new ProductTypeModel((new Sql())->getConnection());
             parent::__construct($this->productTypeModel);
+        }
+
+        private function getValidationRules() {
+            return [
+                'id' => ['type' => 'int', 'required' => false],
+                'id_product' => ['type' => 'int', 'required' => false],
+                'name' => ['type' => 'string', 'required' => false],
+            ];
+        }
+
+        public function getById() {
+            $errors = $this->validate(
+                ['id' => $this->response->getItemRequestId()], 
+                $this->getValidationRules()
+            );
+
+            if(!empty($errors)){
+                return $this->errorValidate($errors);
+            }
+            parent::getById();
+        }
+
+        public function create() {
+            $data = $this->response->getDataRequest();
+            $errors = $this->validate($data, $this->getValidationRules());
+
+            if (!empty($errors)) {
+                return $this->errorValidate($errors);
+            }
+            parent::create();
+        }
+
+        public function update() {
+            $data = $this->response->getDataRequest();
+            $data['id'] = $this->response->getItemRequestId();
+            $errors = $this->validate($data, $this->getValidationRules());
+
+            if(!empty($errors)){
+                return $this->errorValidate($errors);
+            }
+            parent::update();
+        }
+
+        public function delete() {
+            $errors = $this->validate(
+                ['id' => $this->response->getItemRequestId()], 
+                $this->getValidationRules()
+            );
+
+            if(!empty($errors)){
+                return $this->errorValidate($errors);
+            }
+            parent::delete();
         }
     }
 
