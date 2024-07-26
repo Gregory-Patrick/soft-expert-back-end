@@ -19,7 +19,7 @@
                 'relations' => [
                     'product_tax' => [
                         'table' => 'product_tax',
-                        'foreign_key' => 'id_product_type',
+                        'foreign_key' => 'id',
                         'primary_key' => 'id_product_type'
                     ]
                 ]
