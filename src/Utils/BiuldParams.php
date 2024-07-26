@@ -24,12 +24,24 @@
             $setString = implode(', ', array_map(function($col) {
                 return "$col = ?";
             }, $columns));
-    
+        
             return [
                 'setString' => $setString,
                 'values' => $values
             ];
         }
-    }
 
+        public static function buildRelations(array $data, array $relations, callable $getRelatedData) {
+            foreach ($relations as $relationName => $relation) {
+                if (isset($data[$relation['foreign_key']])) {
+                    $relatedData = call_user_func($getRelatedData, $relation, $data[$relation['foreign_key']]);
+                    $data[$relationName] = $relatedData;
+                } else {
+                    $data[$relationName] = null;
+                }
+            }
+
+            return $data;
+        }
+    }
 ?>

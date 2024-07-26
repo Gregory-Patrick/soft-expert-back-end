@@ -33,7 +33,7 @@
             exit();
         }
 
-        public function objectResponse(int $httpCode, array $object) {
+        public function objectResponse(int $httpCode, array $object) {            
             http_response_code($httpCode);
             echo json_encode($object);
             exit();

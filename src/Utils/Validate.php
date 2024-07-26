@@ -2,8 +2,8 @@
 
     namespace App\Utils;
 
-    use App\Utils\Response;
     class Validate {
+
         public function isValid($data, $rules) {
             $errors = [];
     
@@ -27,12 +27,6 @@
                 }
             }
             return $errors;
-        }
-
-        public function Invalid($errors) {
-            $response = (new Response());
-            $response->setSimpleResponse(400, $errors);
-
         }
     }
 

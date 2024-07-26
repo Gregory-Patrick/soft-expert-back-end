@@ -66,6 +66,19 @@
             }
             parent::delete();
         }
+
+        public function updateByProduct(array $data) {
+            $errors = $this->validate($data, $this->getValidationRules());
+            if(!empty($errors)){
+                return $this->errorValidate($errors);
+            }
+
+            if($this->model->update($data['id'], $data)) {
+                return true;
+            }
+
+            $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
+        }
     }
 
 ?>

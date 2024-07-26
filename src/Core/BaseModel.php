@@ -1,12 +1,14 @@
 <?php 
+
     namespace App\Core;
 
-use App\Utils\BiuldParams;
-use PDO;
+    use App\Utils\BiuldParams;
+    use PDO;
 
     class BaseModel {
         protected $conn;
         protected $table;
+        protected $relations = [];
 
         public function __construct($dbConnection, $table) {
             $this->conn = $dbConnection;
@@ -16,14 +18,31 @@ use PDO;
         public function findAll() {
             $stmt = $this->conn->prepare("SELECT * FROM " . $this->table);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$data) {
+                return null;
+            }
+
+            foreach ($data as &$item) {
+                $item = BiuldParams::buildRelations($item, $this->relations, function($relation, $foreignKeyValue) {
+                    return $this->getRelatedData($relation, $foreignKeyValue);
+                });
+            }
+    
+            return $data;
         }
 
         public function findById(int $id) {
             $stmt = $this->conn->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            //Uso de função anonima pois por alguma razão o php não estava entendendo meu callable: [$this, 'getRelatedData']
+            return BiuldParams::buildRelations($data, $this->relations, function($relation, $foreignKeyValue) {
+                return $this->getRelatedData($relation, $foreignKeyValue);
+            });
         }
 
         public function save(array $params) {
@@ -39,8 +58,13 @@ use PDO;
 
         public function update(int $id, array $params) {
             $queryParts = BiuldParams::buildUpdateQueryParts($params);
-            $query = "UPDATE ".$this->table." SET ".$queryParts['setString']." WHERE id = ?";
+            $query = "UPDATE " . $this->table . " SET " . $queryParts['setString'] . " WHERE id = ?";
             
+            // if($queryParts['values'][0] != 4){
+
+                // var_dump($queryParts['values']); die;
+            // }
+
             $stmt = $this->conn->prepare($query);
             foreach($queryParts['values'] as $index => $value) {
                 $stmt->bindValue($index + 1, $value);
@@ -54,6 +78,14 @@ use PDO;
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             return $stmt->execute();
+        }
+
+        protected function getRelatedData(array $relation, $foreignKeyValue) {
+            $query = "SELECT * FROM ".$relation['table']." WHERE ".$relation['primary_key']. " = :foreignKey";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':foreignKey', $foreignKeyValue, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         }
     }
 ?>

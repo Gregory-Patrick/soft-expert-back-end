@@ -27,7 +27,7 @@
             $this->response->setObjectResponse(400, $errors);
         }
 
-        protected function getAll() {
+        public function getAll() {
             $data = $this->model->findAll();
             if(!$data) {
                 $this->response->setSimpleResponse(404, 'Not found');
@@ -35,7 +35,7 @@
             $this->response->objectResponse(200, $data);
         }
 
-        protected function getById() {
+        public function getById() {
             $id = $this->response->getItemRequestId();
             $data = $this->model->findById($id);
             if(!$data) {
@@ -44,7 +44,7 @@
             $this->response->objectResponse(200, $data);
         }
 
-        protected function create() {
+        public function create() {
             $data = $this->response->getDataRequest();
             if($this->model->save($data)) {
                 $this->response->setSimpleResponse(200, 'Registered successfully');
@@ -52,7 +52,7 @@
             $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
         }
 
-        protected function update() {
+        public function update() {
             $id = $this->response->getItemRequestId();
             $data = $this->response->getDataRequest();
             if($this->model->findById($id)) {
@@ -63,7 +63,7 @@
             $this->response->setSimpleResponse(404, 'Not found');
         }
 
-        protected function delete() {
+        public function delete() {
             $id = $this->response->getItemRequestId();
             if($this->model->findById($id)) {
                 $this->model->delete($id);
