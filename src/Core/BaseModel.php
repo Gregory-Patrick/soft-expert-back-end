@@ -59,12 +59,6 @@
         public function update(int $id, array $params) {
             $queryParts = BiuldParams::buildUpdateQueryParts($params);
             $query = "UPDATE " . $this->table . " SET " . $queryParts['setString'] . " WHERE id = ?";
-            
-            // if($queryParts['values'][0] != 4){
-
-                // var_dump($queryParts['values']); die;
-            // }
-
             $stmt = $this->conn->prepare($query);
             foreach($queryParts['values'] as $index => $value) {
                 $stmt->bindValue($index + 1, $value);
@@ -81,11 +75,22 @@
         }
 
         protected function getRelatedData(array $relation, $foreignKeyValue) {
-            $query = "SELECT * FROM ".$relation['table']." WHERE ".$relation['primary_key']. " = :foreignKey";
+            $query = "SELECT * FROM " . $relation['table'] . " WHERE " . $relation['primary_key'] . " = :foreignKey";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':foreignKey', $foreignKeyValue, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $relatedData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (isset($relation['relations'])) {
+                foreach ($relatedData as &$data) {
+                    $data = BiuldParams::buildRelations($data, $relation['relations'], function($relation, $foreignKeyValue) {
+                        return $this->getRelatedData($relation, $foreignKeyValue);
+                    });
+                }
+            }
+
+            return $relatedData;
         }
     }
 ?>

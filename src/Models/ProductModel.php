@@ -15,12 +15,14 @@
             'product_type' => [
                 'table' => 'product_type',
                 'foreign_key' => 'id_product_type',
-                'primary_key' => 'id'
-            ],
-            'product_tax' => [
-                'table' => 'product_tax',
-                'foreign_key' => 'id_product_type',
-                'primary_key' => 'id'
+                'primary_key' => 'id',
+                'relations' => [
+                    'product_tax' => [
+                        'table' => 'product_tax',
+                        'foreign_key' => 'id_product_type',
+                        'primary_key' => 'id'
+                    ]
+                ]
             ]
         ];
 
