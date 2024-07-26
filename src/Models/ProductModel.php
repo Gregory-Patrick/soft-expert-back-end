@@ -20,7 +20,7 @@
                     'product_tax' => [
                         'table' => 'product_tax',
                         'foreign_key' => 'id_product_type',
-                        'primary_key' => 'id'
+                        'primary_key' => 'id_product_type'
                     ]
                 ]
             ]

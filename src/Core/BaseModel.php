@@ -80,16 +80,13 @@
             $stmt->bindParam(':foreignKey', $foreignKeyValue, PDO::PARAM_INT);
             $stmt->execute();
 
-            $relatedData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $relatedData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (isset($relation['relations'])) {
-                foreach ($relatedData as &$data) {
-                    $data = BiuldParams::buildRelations($data, $relation['relations'], function($relation, $foreignKeyValue) {
-                        return $this->getRelatedData($relation, $foreignKeyValue);
-                    });
-                }
+            if ($relatedData && isset($relation['relations'])) {
+                $relatedData = BiuldParams::buildRelations($relatedData, $relation['relations'], function($relation, $foreignKeyValue) {
+                    return $this->getRelatedData($relation, $foreignKeyValue);
+                });
             }
-
             return $relatedData;
         }
     }
