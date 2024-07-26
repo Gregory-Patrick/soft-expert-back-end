@@ -36,10 +36,9 @@
                 if (isset($data[$relation['foreign_key']])) {
                     $relatedData = call_user_func($getRelatedData, $relation, $data[$relation['foreign_key']]);
 
-                    if (isset($relation['relations'])) {
+                    if ($relatedData && isset($relation['relations'])) {
                         $relatedData = self::buildRelations($relatedData, $relation['relations'], $getRelatedData);
                     }
-
                     $data[$relationName] = $relatedData;
                 } else {
                     $data[$relationName] = null;

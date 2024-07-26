@@ -83,8 +83,8 @@
             $relatedData = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($relatedData && isset($relation['relations'])) {
-                $relatedData = BiuldParams::buildRelations($relatedData, $relation['relations'], function($relation, $foreignKeyValue) {
-                    return $this->getRelatedData($relation, $foreignKeyValue);
+                $relatedData = BiuldParams::buildRelations($relatedData, $relation['relations'], function($subRelation, $subForeignKeyValue) use ($relatedData) {
+                    return $this->getRelatedData($subRelation, $relatedData[$subRelation['foreign_key']]);
                 });
             }
             return $relatedData;
