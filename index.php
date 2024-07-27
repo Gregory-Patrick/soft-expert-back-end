@@ -39,5 +39,12 @@ use App\Controllers\TaxController;
     $router->addRoute('PUT', '/api/tax/{id}', [TaxController::class, 'update']);
     $router->addRoute('DELETE', '/api/tax/{id}', [TaxController::class, 'delete']);
 
+    $router->addRoute('POST', '/api/sale', [ProductController::class, 'getOrder']);
+    // $router->addRoute('GET', '/api/sale', [TaxController::class, 'getAll']);
+    // $router->addRoute('POST', '/api/sale', [TaxController::class, 'list']);
+    // $router->addRoute('GET', '/api/sale/{id}', [TaxController::class, 'getById']);
+    // $router->addRoute('PUT', '/api/sale/{id}', [TaxController::class, 'update']);
+    // $router->addRoute('DELETE', '/api/sale/{id}', [TaxController::class, 'delete']);
+
     $router->run();
 ?>
