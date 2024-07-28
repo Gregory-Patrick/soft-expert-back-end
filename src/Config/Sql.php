@@ -26,9 +26,9 @@
 		 * @throws \PDOException Se houver um erro ao tentar se conectar ao banco de dados.
 		 */
 		public function __construct() {
-			$dsn = 'pgsql:host=localhost;port=5432;dbname=market'; // Substitua pelo seu host, porta e nome do banco de dados
-			$username = 'postgres'; // Substitua pelo seu nome de usuário do PostgreSQL
-			$password = 'admin'; // Substitua pela sua senha do PostgreSQL
+			$dsn = 'pgsql:host=localhost;port=5432;dbname=soft_expert'; // Altere como necessário
+			$username = 'postgres'; // Altere como necessário
+			$password = 'admin'; // Altere como necessário
 
 			try {
 				$this->conn = new PDO($dsn, $username, $password);

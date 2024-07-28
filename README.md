@@ -16,10 +16,14 @@ Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de pr
     ```
     composer install
     ```
+4. Inicie o servidor php:
+    ```
+    php -S localhost:8080
+    ```
 
 ## Configuração
 
-Certifique-se de configurar a conexão com o banco de dados no arquivo `BaseModel.php` dentro da pasta `Core`.
+Certifique-se de configurar a conexão com o banco de dados no arquivo `Sql.php` dentro da pasta `Config`.
 
 ## Endpoints da API
 
