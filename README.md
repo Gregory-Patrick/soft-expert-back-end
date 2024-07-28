@@ -2,52 +2,11 @@
 
 Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de produtos, impostos sobre produtos e vendas. A API oferece operações de CRUD (Create, Read, Update, Delete) para esses recursos e é configurada para permitir solicitações de um frontend hospedado em `http://localhost:3000`.
 
-## Estrutura do Projeto
-
-A estrutura do projeto é a seguinte:
-
-project-root/
-├── src/
-│ ├── Core/
-│ │ ├── BaseController.php
-│ │ ├── BaseModel.php
-│ │ └── Router.php
-│ │
-│ ├── Controllers/
-│ │ ├── ProductController.php
-│ │ ├── ProductTaxController.php
-│ │ ├── ProductTypeController.php
-│ │ └── SaleController.php
-│ │
-│ ├── Models/
-│ │ ├── ProductModel.php
-│ │ ├── ProductTaxModel.php
-│ │ ├── ProductTypeModel.php
-│ │ └── SaleModel.php
-│ │
-│ ├── Utils/
-│ │ ├── ArrayUtils.php
-│ │ ├── BiuldParams.php
-│ │ ├── Response.php
-│ │ └── Validate.php
-│ │
-│ └── tests/
-│ ├── BaseControllerTest.php
-│ ├── BaseModelTest.php
-│ └── RouterTest.php
-│
-├── vendor/
-│
-├── composer.json
-│
-└── index.php
-
-
 ## Instalação
 
 1. Clone o repositório:
     ```
-    git clone <url-do-repositorio>
+    git clone <https://github.com/Gregory-Patrick/soft-expert-back-end?tab=readme-ov-file>
     ```
 2. Navegue até o diretório do projeto:
     ```
