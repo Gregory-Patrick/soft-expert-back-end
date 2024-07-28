@@ -3,6 +3,7 @@
 	namespace App\Config;
 
 	use PDO;
+	use PDOException;
 
 	/**
 	 * Classe Sql
@@ -19,14 +20,23 @@
 		/**
 		 * Construtor da classe Sql.
 		 *
-		 * Inicializa a conexão com o banco de dados MySQL.
+		 * Inicializa a conexão com o banco de dados PostgreSQL.
 		 * Define o modo de erro do PDO para exceções.
 		 *
 		 * @throws \PDOException Se houver um erro ao tentar se conectar ao banco de dados.
 		 */
 		public function __construct() {
-			$this->conn = new PDO('mysql:host=localhost;dbname=soft_expert', 'root', 'root');
-			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$dsn = 'pgsql:host=localhost;port=5432;dbname=market'; // Substitua pelo seu host, porta e nome do banco de dados
+			$username = 'postgres'; // Substitua pelo seu nome de usuário do PostgreSQL
+			$password = 'admin'; // Substitua pela sua senha do PostgreSQL
+
+			try {
+				$this->conn = new PDO($dsn, $username, $password);
+				$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			} catch (PDOException $e) {
+				echo 'Connection failed: ' . $e->getMessage();
+				die();
+			}
 		}
 
 		/**
