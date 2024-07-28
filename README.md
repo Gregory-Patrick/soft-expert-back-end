@@ -7,7 +7,6 @@ Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de pr
 A estrutura do projeto é a seguinte:
 
 project-root/
-│
 ├── src/
 │ ├── Core/
 │ │ ├── BaseController.php
@@ -36,12 +35,7 @@ project-root/
 │ ├── BaseControllerTest.php
 │ ├── BaseModelTest.php
 │ └── RouterTest.php
-|
-├── tests/
-│ ├── BaseControllerTest.php
-│ ├── BaseModelTest.php
-│ └── RouterTest.php
-|
+│
 ├── vendor/
 │
 ├── composer.json
