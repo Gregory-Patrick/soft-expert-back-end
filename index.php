@@ -10,15 +10,31 @@
     /**
      * Configuração de cabeçalhos CORS.
      */
-    header("Access-Control-Allow-Origin: http://localhost:3000");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header("Access-Control-Max-Age: 86400");
+    $allowedOrigins = [
+        'http://localhost:3000',
+        'https://soft-expert-front-end.vercel.app'
+    ];
+
+    if (isset($_SERVER['HTTP_ORIGIN'])) {
+        if (in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        }
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Max-Age: 86400");
+    }
 
     /**
      * Tratamento de requisições OPTIONS para CORS.
      */
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        }
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+        }
         http_response_code(204);
         exit();
     }
