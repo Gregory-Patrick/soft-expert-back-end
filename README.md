@@ -25,6 +25,8 @@ Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de pr
 
 Certifique-se de configurar a conexão com o banco de dados no arquivo `Sql.php` dentro da pasta `Config`.
 
+O backup do banco de dados encontra-se na raiz do projeto nomeado de: 'database.backup'
+
 ## Endpoints da API
 
 ### Produtos
