@@ -1,4 +1,4 @@
-<?php 
+<?php
 
     namespace App\Core;
 
@@ -19,6 +19,14 @@
             $this->validate = new Validate();
         }
 
+        public function setValidate($validate) {
+            $this->validate = $validate;
+        }
+
+        public function setResponse($response) {
+            $this->response = $response;
+        }
+
         protected function validate(array $data, array $rules) {
             $this->validate->isValid($data, $rules);
         }
@@ -29,8 +37,8 @@
 
         public function getAll() {
             $data = $this->model->findAll();
-            if(!$data) {
-                $this->response->setSimpleResponse(404, 'Not found');
+            if (!$data) {
+                return $this->response->setSimpleResponse(404, 'Not found');
             }
             $this->response->objectResponse(200, $data);
         }
@@ -38,16 +46,16 @@
         public function getById() {
             $id = $this->response->getItemRequestId();
             $data = $this->model->findById($id);
-            if(!$data) {
-                $this->response->setSimpleResponse(404, 'Not found');
+            if (!$data) {
+                return $this->response->setSimpleResponse(404, 'Not found');
             }
             $this->response->objectResponse(200, $data);
         }
 
         public function create() {
             $data = $this->response->getDataRequest();
-            if($this->model->save($data)) {
-                $this->response->setSimpleResponse(200, 'Registered successfully');
+            if ($this->model->save($data)) {
+                return $this->response->setSimpleResponse(200, 'Registered successfully');
             }
             $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
         }
@@ -55,9 +63,9 @@
         public function update() {
             $id = $this->response->getItemRequestId();
             $data = $this->response->getDataRequest();
-            if($this->model->findById($id)) {
-                if($this->model->update($id, $data)) {
-                    $this->response->setSimpleResponse(200, 'Updated successfully');
+            if ($this->model->findById($id)) {
+                if ($this->model->update($id, $data)) {
+                    return $this->response->setSimpleResponse(200, 'Updated successfully');
                 }
             }
             $this->response->setSimpleResponse(404, 'Not found');
@@ -65,10 +73,11 @@
 
         public function delete() {
             $id = $this->response->getItemRequestId();
-            if($this->model->findById($id)) {
+            if ($this->model->findById($id)) {
                 $this->model->delete($id);
-                $this->response->setSimpleResponse(200, 'Deleted successfully');
+                return $this->response->setSimpleResponse(200, 'Deleted successfully');
             }
             $this->response->setSimpleResponse(404, 'Not found');
         }
     }
+?>

@@ -6,9 +6,10 @@
     require_once __DIR__ . '/vendor/autoload.php';
 
     use App\Core\Router;
+    use App\Controllers\SaleController;
     use App\Controllers\ProductController;
+    use App\Controllers\ProductTaxController;
     use App\Controllers\ProductTypeController;
-use App\Controllers\TaxController;
 
     header("Access-Control-Allow-Origin: http://localhost:3000");
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -29,22 +30,11 @@ use App\Controllers\TaxController;
 
     $router->addRoute('GET', '/api/types', [ProductTypeController::class, 'getAll']);
     $router->addRoute('POST', '/api/types', [ProductTypeController::class, 'create']);
-    $router->addRoute('GET', '/api/types/{id}', [ProductTypeController::class, 'getById']);
-    $router->addRoute('PUT', '/api/types/{id}', [ProductTypeController::class, 'update']);
-    $router->addRoute('DELETE', '/api/types/{id}', [ProductTypeController::class, 'delete']);
 
-    $router->addRoute('GET', '/api/tax', [TaxController::class, 'getAll']);
-    $router->addRoute('POST', '/api/tax', [TaxController::class, 'create']);
-    $router->addRoute('GET', '/api/tax/{id}', [TaxController::class, 'getById']);
-    $router->addRoute('PUT', '/api/tax/{id}', [TaxController::class, 'update']);
-    $router->addRoute('DELETE', '/api/tax/{id}', [TaxController::class, 'delete']);
+    $router->addRoute('POST', '/api/tax', [ProductTaxController::class, 'create']);
+    $router->addRoute('GET', '/api/tax/{id}', [ProductTaxController::class, 'getById']);
 
-    $router->addRoute('POST', '/api/sale', [ProductController::class, 'getOrder']);
-    // $router->addRoute('GET', '/api/sale', [TaxController::class, 'getAll']);
-    // $router->addRoute('POST', '/api/sale', [TaxController::class, 'list']);
-    // $router->addRoute('GET', '/api/sale/{id}', [TaxController::class, 'getById']);
-    // $router->addRoute('PUT', '/api/sale/{id}', [TaxController::class, 'update']);
-    // $router->addRoute('DELETE', '/api/sale/{id}', [TaxController::class, 'delete']);
-
+    $router->addRoute('GET', '/api/sale', [SaleController::class, 'getAll']);
+    $router->addRoute('POST', '/api/sale', [SaleController::class, 'create']);
     $router->run();
 ?>

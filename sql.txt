@@ -1,25 +1,41 @@
-CREATE TABLE product (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL
-);
-
 CREATE TABLE product_type (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_product INT  NOT NULL,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE product ( 
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product_type INT,
     name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_product) REFERENCES product(id)
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_product_type) REFERENCES product_type(id)
 );
 
 CREATE TABLE product_tax (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_product_type INT NOT NULL,
-    pis DECIMAL(5, 2)
-    confins DECIMAL(5, 2)
+    pis DECIMAL(5, 2),
+    confins DECIMAL(5, 2),
     icms DECIMAL(5, 2),
     ipi DECIMAL(5, 2),
-    FOREIGN KEY (id_product_type) REFERENCES product_type(id)
+    FOREIGN KEY (id_product_type) REFERENCES product_type(id),
+    UNIQUE (id_product_type)
 );
 
-Venda: ID, Quantidade, id_produto, Preço Uni, preço total
-Imposto sobre a venda: ID, id_venda, pis, confins, icms , ipi, total
+CREATE TABLE sale (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product INT NOT NULL,
+    quantity INT NOT NULL,
+    price_uni DECIMAL(10, 2) NOT NULL,
+    price_total DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE sale_tax (
+    id_sale INT NOT NULL,
+    pis DECIMAL(10, 2) NOT NULL,
+    confins DECIMAL(10, 2) NOT NULL,
+    icms DECIMAL(10, 2) NOT NULL,
+    ipi DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_sale) REFERENCES sale(id)
+);

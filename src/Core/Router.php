@@ -1,39 +1,39 @@
 <?php 
 
-    namespace App\Core;
+namespace App\Core;
 
-    class Router {
-        private $routes = [];
+class Router {
+    private $routes = [];
 
-        public function addRoute($method, $route, $handler) {
-            $route = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $route);
-            $this->routes[] = [
-                'method' => $method,
-                'route' => $route,
-                'handler' => $handler
-            ];
-        }
-
-        public function run() {
-            $requestMethod = $_SERVER['REQUEST_METHOD'];
-            $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            foreach ($this->routes as $route) {
-                if ($requestMethod == $route['method'] && preg_match('#^' . $route['route'] . '$#', $requestUri, $matches)) {
-                    $handler = $route['handler'];
-                    if (is_array($handler)) {
-                        $controller = new $handler[0]();
-                        $method = $handler[1];
-                        call_user_func_array([$controller, $method], array_slice($matches, 1));
-                    } else {
-                        $handler();
-                    }
-                    return;
-                }
-            }
-    
-            http_response_code(404);
-            echo json_encode(['error' => 'Route not found']);
-        }
+    public function addRoute($method, $route, $handler) {
+        $route = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $route);
+        $this->routes[] = [
+            'method' => $method,
+            'route' => $route,
+            'handler' => $handler
+        ];
     }
 
+    public function run() {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        foreach ($this->routes as $route) {
+            if ($requestMethod == $route['method'] && preg_match('#^' . $route['route'] . '$#', $requestUri, $matches)) {
+                $handler = $route['handler'];
+                array_shift($matches); // Remove the full match from the matches array
+                if (is_array($handler)) {
+                    $controller = new $handler[0]();
+                    $method = $handler[1];
+                    call_user_func_array([$controller, $method], $matches);
+                } else {
+                    call_user_func_array($handler, $matches);
+                }
+                return;
+            }
+        }
+
+        http_response_code(404);
+        echo json_encode(['error' => 'Route not found']);
+    }
+}
 ?>
