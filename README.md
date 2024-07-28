@@ -25,7 +25,7 @@ Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de pr
 
 Certifique-se de configurar a conexão com o banco de dados no arquivo `Sql.php` dentro da pasta `Config`.
 
-Data Base encontra-se na raiz do projeto nomeado de: `DataBase.backup`.
+- Import data base encontra-se na raiz do projeto nomeado de: `soft_expert.backup`.
 
 ## Endpoints da API
 
