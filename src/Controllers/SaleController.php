@@ -6,14 +6,33 @@
     use App\Core\BaseController;
     use App\Models\SaleModel;
 
+    /**
+     * Classe SaleController
+     *
+     * Esta classe gerencia as operações relacionadas às vendas.
+     */
     class SaleController extends BaseController {
-        protected  $saleModel;
+        
+        /**
+         * @var SaleModel A instância do modelo de vendas.
+         */
+        protected $saleModel;
 
+        /**
+         * Construtor da classe SaleController.
+         *
+         * Inicializa o modelo de vendas.
+         */
         public function __construct() {
             $this->saleModel = new SaleModel((new Sql())->getConnection());
             parent::__construct($this->saleModel);
         }
 
+        /**
+         * Obtém as regras de validação para os dados de vendas.
+         *
+         * @return array Um array associativo contendo as regras de validação.
+         */
         private function getValidationRules() {
             return [
                 'id_product' => ['type' => 'int', 'required' => true],
@@ -23,12 +42,20 @@
             ];
         }
 
+        /**
+         * Cria uma nova venda.
+         *
+         * Valida os dados antes de criar a venda no modelo e salva as informações de impostos associadas.
+         *
+         * @return void
+         */
         public function create() {
             $data = $this->response->getDataRequest();
             $SaleTaxController = new SaleTaxController();
 
             if (!isset($data['products']) || !is_array($data['products'])) {
                 $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
+                return;
             }
             
             foreach ($data['products'] as $product) {
@@ -39,7 +66,7 @@
                     'price_total' => $product['price'] * $product['quantity']
                 ];
                 
-                $errors = $this->validate($data, $this->getValidationRules());
+                $errors = $this->validate($saleData, $this->getValidationRules());
                 if (!empty($errors)) {
                     return $this->errorValidate($errors);
                 }
@@ -47,6 +74,7 @@
                 $saleId = $this->model->save($saleData);
                 if (!$saleId) {
                     $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
+                    return;
                 }
                 
                 $taxData = [
@@ -63,10 +91,11 @@
                 
                 if (!$SaleTaxController->saveTaxProduct($taxData)) {
                     $this->response->setSimpleResponse(500, 'Something unexpected happened. Try again later');
+                    return;
                 }
             }
             
-            return $this->response->setSimpleResponse(200, 'Registered successfully');
+            $this->response->setSimpleResponse(200, 'Registered successfully');
         }
     }
 

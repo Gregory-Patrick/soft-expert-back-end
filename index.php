@@ -1,8 +1,4 @@
 <?php
-
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
     require_once __DIR__ . '/vendor/autoload.php';
 
     use App\Core\Router;
@@ -11,30 +7,43 @@
     use App\Controllers\ProductTaxController;
     use App\Controllers\ProductTypeController;
 
+    /**
+     * Configuração de cabeçalhos CORS.
+     */
     header("Access-Control-Allow-Origin: http://localhost:3000");
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header("Access-Control-Max-Age: 86400");
 
+    /**
+     * Tratamento de requisições OPTIONS para CORS.
+     */
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         http_response_code(204);
         exit();
     }
 
     $router = new Router();
+
+    // Definição de rotas para produtos
     $router->addRoute('GET', '/api/products', [ProductController::class, 'getAll']);
     $router->addRoute('POST', '/api/products', [ProductController::class, 'create']);
     $router->addRoute('GET', '/api/products/{id}', [ProductController::class, 'getById']);
     $router->addRoute('PUT', '/api/products/{id}', [ProductController::class, 'update']);
     $router->addRoute('DELETE', '/api/products/{id}', [ProductController::class, 'delete']);
 
+    // Definição de rotas para tipos de produtos
     $router->addRoute('GET', '/api/types', [ProductTypeController::class, 'getAll']);
     $router->addRoute('POST', '/api/types', [ProductTypeController::class, 'create']);
 
+    // Definição de rotas para impostos sobre produtos
     $router->addRoute('POST', '/api/tax', [ProductTaxController::class, 'create']);
     $router->addRoute('GET', '/api/tax/{id}', [ProductTaxController::class, 'getById']);
 
+    // Definição de rotas para vendas
     $router->addRoute('GET', '/api/sale', [SaleController::class, 'getAll']);
     $router->addRoute('POST', '/api/sale', [SaleController::class, 'create']);
+
+    // Executa o roteador para despachar a rota correspondente
     $router->run();
 ?>
