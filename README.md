@@ -113,7 +113,8 @@ Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICEN
 
 ## Contato
 
-Para mais informações, entre em contato com [seu-email@example.com](mailto:gregorypattrick@gmail.com).
+Para mais informações, entre em contato com [gregorypattrick@gmail.com](mailto:gregorypattrick@gmail.com).
 
 ---
+
 Este é um breve resumo da estrutura e funcionamento da API. Para mais detalhes, consulte o código-fonte e os comentários em cada arquivo.
