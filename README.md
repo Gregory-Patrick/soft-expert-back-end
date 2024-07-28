@@ -55,15 +55,6 @@ A API está configurada para permitir requisições do frontend hospedado em `ht
 Os testes unitários estão localizados na pasta `tests` e utilizam o PHPUnit. Para rodar os testes, execute:
 vendor/bin/phpunit
 
-
-## Contribuição
-
-Sinta-se à vontade para abrir issues e pull requests. Todas as contribuições são bem-vindas!
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
 ## Contato
 
 Para mais informações, entre em contato com [gregorypattrick@gmail.com](mailto:gregorypattrick@gmail.com).
