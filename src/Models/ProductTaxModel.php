@@ -2,9 +2,10 @@
 
     namespace App\Models;
 
+    use PDO;
+    use Exception;
     use App\Core\BaseModel;
     use App\Utils\BiuldParams;
-    use PDO;
 
     /**
      * Classe ProductTaxModel
@@ -34,10 +35,14 @@
          * @return array|false O registro encontrado, ou false se nenhum registro foi encontrado.
          */
         public function find(int $id) {
-            $stmt = $this->conn->prepare("SELECT * FROM " . $this->table . " WHERE id_product_type = :id");
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            try {
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->table . " WHERE id_product_type = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (Exception $e) {
+                return false;
+            }
         }
 
         /**
@@ -48,16 +53,25 @@
          * @return bool True se a atualização foi bem-sucedida, false caso contrário.
          */
         public function update(int $id, array $params) {
-            $queryParts = BiuldParams::buildUpdateQueryParts($params);
-            $query = "UPDATE " . $this->table . " SET " . $queryParts['setString'] . " WHERE id_product_type = ?";
-            $stmt = $this->conn->prepare($query);
-            foreach($queryParts['values'] as $index => $value) {
-                $stmt->bindValue($index + 1, $value);
-            }
-            $stmt->bindValue(count($queryParts['values']) + 1, $id, PDO::PARAM_INT);
-            return $stmt->execute();
-        }
+            try {
+                $this->conn->beginTransaction();
 
+                $queryParts = BiuldParams::buildUpdateQueryParts($params);
+                $query = "UPDATE " . $this->table . " SET " . $queryParts['setString'] . " WHERE id_product_type = ?";
+                $stmt = $this->conn->prepare($query);
+                foreach($queryParts['values'] as $index => $value) {
+                    $stmt->bindValue($index + 1, $value);
+                }
+                $stmt->bindValue(count($queryParts['values']) + 1, $id, PDO::PARAM_INT);
+                $result = $stmt->execute();
+
+                $this->conn->commit();
+                return $result;
+            } catch (Exception $e) {
+                $this->conn->rollBack();
+                return false;
+            }
+        }
     }
 
 ?>

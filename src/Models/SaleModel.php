@@ -4,6 +4,8 @@
 
     use App\Core\BaseModel;
     use App\Utils\BiuldParams;
+    use PDO;
+    use Exception;
 
     /**
      * Classe SaleModel
@@ -45,19 +47,29 @@
          * @return mixed O ID da nova venda ou false em caso de falha.
          */
         public function save(array $params) {
-            $queryParts = BiuldParams::buildInsertQueryParts($params);
-            $query = "INSERT INTO ".$this->table." (".$queryParts['columnsString'].") VALUES (".$queryParts['placeholders'].")";
+            try {
+                $this->conn->beginTransaction();
 
-            $stmt = $this->conn->prepare($query);
-            foreach($queryParts['values'] as $index => $value) {
-                $stmt->bindValue($index + 1, $value);
-            }
+                $queryParts = BiuldParams::buildInsertQueryParts($params);
+                $query = "INSERT INTO " . $this->table . " (" . $queryParts['columnsString'] . ") VALUES (" . $queryParts['placeholders'] . ")";
 
-            if(!$stmt->execute()) {
+                $stmt = $this->conn->prepare($query);
+                foreach($queryParts['values'] as $index => $value) {
+                    $stmt->bindValue($index + 1, $value);
+                }
+
+                if(!$stmt->execute()) {
+                    $this->conn->rollBack();
+                    return false;
+                }
+
+                $lastInsertId = $this->conn->lastInsertId();
+                $this->conn->commit();
+                return $lastInsertId;
+            } catch (Exception $e) {
+                $this->conn->rollBack();
                 return false;
             }
-
-            return $this->conn->lastInsertId();
         }
     }
 
