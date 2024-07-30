@@ -54,7 +54,7 @@ Certifique-se de configurar a conexão com o banco de dados no arquivo `Sql.php`
 
 ## CORS
 
-A API está configurada para permitir requisições do frontend hospedado em `http://localhost:3000`. Os cabeçalhos CORS são definidos no arquivo `index.php`.
+A API está configurada para permitir requisições do frontend hospedado em `http://localhost:3000` e também em `https://soft-expert-front-end.vercel.app/`. Os cabeçalhos CORS são definidos no arquivo `index.php`.
 
 ## Testes
 
