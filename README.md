@@ -6,7 +6,7 @@ Este projeto é uma API desenvolvida em PHP para gerenciar produtos, tipos de pr
 
 1. Clone o repositório:
     ```
-    git clone <https://github.com/Gregory-Patrick/soft-expert-back-end
+    git clone <https://github.com/Gregory-Patrick/soft-expert-back-end>
     ```
 2. Navegue até o diretório do projeto:
     ```
